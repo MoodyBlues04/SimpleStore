@@ -2,103 +2,126 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use yii\base\Exception;
+use yii\base\NotSupportedException;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
+
+/**
+ * This is the model class for table "{{%user}}".
+ *
+ * @property int $id
+ * @property string $username
+ * @property string $email
+ * @property string $password
+ * @property string $auth_key
+ * @property string|null $email_verify_token
+ * @property string|null $email_verified_at
+ * @property string $created_at
+ * @property string $updated_at
+ */
+class User extends ActiveRecord implements IdentityInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function findIdentity($id)
+    public static function tableName(): string
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return "{{%users}}";
+    }
+
+    public static function findIdentity($id): User
+    {
+        return static::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null): User
+    {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
     /**
-     * {@inheritdoc}
+     * @param bool $insert
+     * @return bool
+     * @throws Exception
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public function beforeSave($insert): bool
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
+        if (!parent::beforeSave($insert)) {
+            return false;
         }
-
-        return null;
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
+        if ($this->isNewRecord) {
+            $this->generateAuthKey();
         }
-
-        return null;
+        return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
+    public function rules(): array
+    {
+        return [
+            ['username', 'required'],
+            ['username', 'unique', 'targetClass' => self::class, 'message' => 'This username has already been taken.'],
+
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'unique', 'targetClass' => self::class, 'message' => 'This email address has already been taken.'],
+        ];
+    }
+
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
+    public function getAuthKey(): string
     {
-        return $this->authKey;
+        return $this->auth_key;
+    }
+
+    public function validateAuthKey($authKey): bool
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+
+    public static function findByUsername(string $username): User
+    {
+        return static::findOne(['username' => $username]);
+    }
+
+    public function validatePassword(string $password): bool
+    {
+        return \Yii::$app->security->validatePassword($password, $this->password);
     }
 
     /**
-     * {@inheritdoc}
+     * @throws Exception
      */
-    public function validateAuthKey($authKey)
+    public function setPassword(string $password): void
     {
-        return $this->authKey === $authKey;
+        $this->password = \Yii::$app->security->generatePasswordHash($password);
     }
 
     /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
+     * Generates "remember me" authentication key
+     * @throws Exception
      */
-    public function validatePassword($password)
+    public function generateAuthKey(): void
     {
-        return $this->password === $password;
+        $this->auth_key = \Yii::$app->security->generateRandomString();
+    }
+
+    public static function findByEmailVerifyToken(string $emailConfirmToken): ?User
+    {
+        return static::findOne(['email_verify_token' => $emailConfirmToken]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function generateEmailVerifyToken(): void
+    {
+        $this->email_verify_token = \Yii::$app->security->generateRandomString();
+    }
+
+    public function removeEmailVerifyToken(): void
+    {
+        $this->email_verify_token = null;
     }
 }

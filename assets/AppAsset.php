@@ -21,6 +21,9 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+        'css/plugins/swiper-bundle.min.css',
+        'css/plugins/glightbox.min.css',
+        'css/vendor/bootstrap.min.css',
     ];
     public $js = [
     ];
