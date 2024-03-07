@@ -1,9 +1,8 @@
 <?php
 
-namespace app\components;
+namespace app\widgets;
 
 use yii\base\Widget;
-use yii\bootstrap5\Html;
 
 class LoadingSpinnerWidget extends Widget
 {

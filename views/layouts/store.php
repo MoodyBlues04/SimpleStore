@@ -4,10 +4,10 @@
 /** @var string $content */
 
 use app\assets\AppAsset;
-use app\components\LoadingSpinnerWidget;
-use app\components\ShoppingCartWidget;
-use app\components\MainHeaderWidget;
-use app\components\FooterWidget;
+use app\widgets\FooterWidget;
+use app\widgets\LoadingSpinnerWidget;
+use app\widgets\MainHeaderWidget;
+use app\widgets\ShoppingCartWidget;
 
 AppAsset::register($this);
 ?>
@@ -76,7 +76,7 @@ AppAsset::register($this);
     <?php endif ?>
 
 <!--    TODO via modal -->
-    
+
     <?php if (Yii::$app->session->hasFlash('success')): ?>
         <div class="alert alert-success alert-dismissable">
             <h4><i class="icon fa fa-check"></i>Saved!</h4>
