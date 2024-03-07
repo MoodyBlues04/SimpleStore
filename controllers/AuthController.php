@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\forms\EmailConfirm;
 use app\models\forms\LoginForm;
 use app\models\forms\SignupForm;
+use app\models\User;
 use yii\base\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -49,14 +50,17 @@ class AuthController extends Controller
             return $this->goHome();
         }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+        try {
+            $model = new LoginForm();
+            if ($model->load(Yii::$app->request->post(), '') && $model->login()) {
+                \Yii::$app->getSession()->setFlash('success', 'You\'ve successfully logged in');
+                return $this->goBack();
+            }
+            var_dump(Yii::$app->request->post());
+        } catch (\Exception $e) {
+            \Yii::$app->getSession()->setFlash('error', $e->getMessage());
         }
+        return $this->render('login');
     }
 
     public function actionLogout(): \yii\web\Response
@@ -66,20 +70,18 @@ class AuthController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * @throws Exception
-     */
     public function actionSignup(): \yii\web\Response|string
     {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->getSession()->setFlash('success', 'Подтвердите ваш электронный адрес.');
-            return $this->goHome();
+        try {
+            $model = new SignupForm();
+            if ($model->load(Yii::$app->request->post(), '') && $model->signUp()) {
+                Yii::$app->getSession()->setFlash('success', 'Подтвердите ваш электронный адрес.');
+                return $this->render('signup');
+            }
+        } catch (\Exception $e) {
+            Yii::$app->getSession()->setFlash('error', $e->getMessage());
         }
-
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
+        return $this->render('signup');
     }
 
     public function actionEmailConfirm($token): \yii\web\Response
@@ -92,6 +94,6 @@ class AuthController extends Controller
             Yii::$app->getSession()->setFlash('error', 'Email verify failed.');
         }
 
-        return $this->goHome();
+        return $this->redirect('/auth/login');
     }
 }

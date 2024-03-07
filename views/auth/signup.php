@@ -14,7 +14,7 @@ $this->params['breadcrumbs'] = [
 
 <div class="login__section section--padding">
     <div class="container">
-        <form action="#">
+        <form action="/auth/signup" method="POST">
             <div class="login__section--inner">
                 <div class="row row-cols-md-2 row-cols-1">
                     <div class="col offset-md-3">
@@ -25,16 +25,16 @@ $this->params['breadcrumbs'] = [
                             </div>
                             <div class="account__login--inner">
                                 <label>
-                                    <input class="account__login--input" placeholder="Username" type="text">
+                                    <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>">
                                 </label>
                                 <label>
-                                    <input class="account__login--input" placeholder="Email Addres" type="email">
+                                    <input class="account__login--input" placeholder="Username" type="text" name="username">
                                 </label>
                                 <label>
-                                    <input class="account__login--input" placeholder="Password" type="password">
+                                    <input class="account__login--input" placeholder="Email Addres" type="email" name="email">
                                 </label>
                                 <label>
-                                    <input class="account__login--input" placeholder="Confirm Password" type="password">
+                                    <input class="account__login--input" placeholder="Password" type="password" name="password">
                                 </label>
                                 <label>
                                     <button class="account__login--btn primary__btn mb-10" type="submit">Submit & Register</button>

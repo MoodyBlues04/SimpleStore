@@ -3,15 +3,14 @@
 namespace app\models\forms;
 
 use app\models\User;
-use yii\base\Exception;
 use yii\base\Model;
 use Yii;
 
 class SignupForm extends Model
 {
-    public string $username;
-    public string $email;
-    public string $password;
+    public string $username = '';
+    public string $email = '';
+    public string $password = '';
 
     public function rules(): array
     {
@@ -32,12 +31,13 @@ class SignupForm extends Model
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    public function signUp(): ?User
+    public function signUp(): User
     {
         if (!$this->validate()) {
-            return null;
+            $errors = json_encode($this->errors);
+            throw new \Exception("Validation errors: {$errors}");
         }
 
         $user = new User();
@@ -48,10 +48,8 @@ class SignupForm extends Model
         $user->generateEmailVerifyToken();
 
         if (!$user->save()) {
-            return null;
+            throw new \Exception("Cannot save user");
         }
-
-//        TODO config mailing && refactor all
 
         Yii::$app->mailer->compose('@app/mail/email_confirm', compact('user'))
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
