@@ -8,6 +8,8 @@ use app\models\Vendor;
 use yii\db\ActiveQuery;
 use yii\web\Controller;
 use yii\web\Request;
+use yii\web\Response;
+use yii\web\Session;
 
 class StoreController extends Controller
 {
@@ -18,11 +20,13 @@ class StoreController extends Controller
     public $layout = 'store';
 
     private Request $appRequest;
+    private Session $session;
 
     public function __construct($id, $module, $config = [])
     {
         parent::__construct($id, $module, $config);
         $this->appRequest = \Yii::$app->request;
+        $this->session = \Yii::$app->getSession();
     }
 
     public function actionIndex(): string
@@ -46,9 +50,17 @@ class StoreController extends Controller
         ));
     }
 
-    public function actionShow()
+    public function actionShow(): string|Response
     {
+        $id = $this->appRequest->get('id');
+        if (is_null($id)) {
+            $this->session->getFlash('error', 'Incorect product id');
+            return $this->redirect('/store');
+        }
 
+        $product = Product::findOne($id);
+
+        return $this->render('/store/show', compact('product'));
     }
 
     private function queryFilters(ActiveQuery $query): ActiveQuery
