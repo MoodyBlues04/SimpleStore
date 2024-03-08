@@ -1,6 +1,5 @@
 <?php
 /**
- * @var \app\models\User $admin
  * @var \app\models\User[] $users
  */
 ?>
@@ -27,7 +26,7 @@
                     <td class="account__table--body__child--items"><?=json_encode($user->getRoleNames())?></td>
                     <td class="account__table--body__child--items">
                         <a href="<?= \yii\helpers\Url::to(['/admin/edit-user', 'id' => $user->id])?>" class="account__details--footer__btn" type="button">Edit</a>
-                        <a href="/admin/delete-user" class="account__details--footer__btn" type="button">Delete</a>
+<!--                        <a href="/admin/delete-user" class="account__details--footer__btn" type="button">Delete</a>-->
                     </td>
                 </tr>
             <?php endforeach; ?>

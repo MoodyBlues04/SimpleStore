@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\User;
+use app\modules\rbac\Roles;
 use yii\web\Controller;
 
 class ProfileController extends Controller
@@ -14,8 +15,13 @@ class ProfileController extends Controller
         if (\Yii::$app->user->isGuest) {
             return $this->redirect('/auth/login');
         }
+
         /** @var User $user */
         $user = \Yii::$app->user->getIdentity();
+
+        if (in_array(Roles::ADMIN_ROLE, $user->getRoleNames())) {
+            return $this->redirect('/admin');
+        }
         return $this->render('index', compact('user'));
     }
 }

@@ -5,7 +5,6 @@
  * @var string $content
  */
 
-use app\models\User;
 use app\assets\AppAsset;
 use app\widgets\FooterWidget;
 use app\widgets\LoadingSpinnerWidget;
@@ -97,7 +96,7 @@ AppAsset::register($this);
                             <a href="/admin/user">Users</a>
                         </li>
                         <li class="account__menu--list">
-                            <a href="/admin/permission">Permissions</a>
+                            <a href="/admin/role">Roles</a>
                         </li>
                         <li class="account__menu--list">
                             <a href="/admin/vendor">Vendors</a>

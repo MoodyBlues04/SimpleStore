@@ -44,10 +44,7 @@ class AdminController extends Controller
     public function actionUser(): string
     {
         $users = User::find()->where(['<>', 'id', $this->admin->id])->all();
-        return $this->render('user', [
-            'admin' => $this->admin,
-            'users' => $users,
-        ]);
+        return $this->render('user', compact('users'));
     }
 
     public function actionEditUser(): string|Response
@@ -68,21 +65,40 @@ class AdminController extends Controller
 
         $user = User::findOne($userId);
         $roles = \Yii::$app->authManager->getRoles();
-        return $this->render('edit-user', [
-            'admin' => $this->admin,
-            'user' => $user,
-            'roles' => $roles,
-        ]);
+        return $this->render('edit-user', compact('user', 'roles'));
     }
 
-    public function actionPermission(): string
+    public function actionRole(): string
     {
-        return $this->render('user');
+        $roles = \Yii::$app->authManager->getRoles();
+
+        return $this->render('roles', compact('roles'));
+    }
+
+    public function actionEditRole(): string|Response
+    {
+        if (\Yii::$app->request->isPost) {
+//            $form = new EditUserForm();
+//            if ($form->load(\Yii::$app->request->post(), '') && $form->update()) {
+//                \Yii::$app->getSession()->setFlash('success', 'User updated');
+//            }
+            return $this->redirect('/admin/role');
+        }
+
+        $roleName = \Yii::$app->request->get('role');
+        if (is_null($roleName)) {
+            \Yii::$app->getSession()->setFlash('error', 'Not specified role');
+            return $this->redirect('/admin/role');
+        }
+
+        $role = \Yii::$app->authManager->getRole($roleName);
+        $permissions = \Yii::$app->authManager->getPermissions();
+        return $this->render('edit-role', compact('role', 'permissions'));
     }
 
     public function actionVendor(): string
     {
-        return $this->render('user');
+        return $this->render('vendor');
     }
 
     public function actionCategory(): string
