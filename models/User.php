@@ -5,6 +5,7 @@ namespace app\models;
 use yii\base\Exception;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
+use yii\rbac\Role;
 use yii\web\IdentityInterface;
 
 /**
@@ -63,6 +64,23 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'email'],
             ['email', 'unique', 'targetClass' => self::class, 'message' => 'This email address has already been taken.'],
         ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getRoleNames(): array
+    {
+        $roleNames = array_map(fn(\yii\rbac\Role $role) => $role->name, $this->roles());
+        return array_values($roleNames);
+    }
+
+    /**
+     * @return Role[]
+     */
+    public function roles(): array
+    {
+        return \Yii::$app->authManager->getRolesByUser($this->id);
     }
 
     public function getId(): int

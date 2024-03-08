@@ -2,15 +2,13 @@
 
 namespace app\controllers;
 
-use app\models\forms\EmailConfirm;
-use app\models\forms\LoginForm;
-use app\models\forms\SignupForm;
-use app\models\User;
-use yii\base\Exception;
+use app\models\forms\auth\EmailConfirm;
+use app\models\forms\auth\LoginForm;
+use app\models\forms\auth\SignupForm;
+use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-use Yii;
 
 class AuthController extends Controller
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models\forms;
+namespace app\models\forms\auth;
 
 use app\models\User;
-use yii\base\Model;
 use Yii;
+use yii\base\Model;
 
 class SignupForm extends Model
 {
