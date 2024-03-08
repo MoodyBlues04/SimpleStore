@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Category;
+use app\models\forms\admin\CreateCategoryForm;
 use app\models\forms\admin\CreateVendorForm;
 use app\models\forms\admin\EditRoleForm;
 use app\models\forms\admin\EditUserForm;
@@ -158,7 +160,53 @@ class AdminController extends Controller
 
     public function actionCategory(): string
     {
-        return $this->render('user');
+        $categories = Category::find()->all();
+        return $this->render('category', compact('categories'));
+    }
+
+    public function actionCreateCategory(): string|Response
+    {
+        if ($this->appRequest->isPost) {
+            $form = new CreateCategoryForm();
+            if ($form->load($this->appRequest->post(), '') && $form->create()) {
+                $this->session->setFlash('success', 'Category created');
+            }
+            return $this->redirect('/admin/category');
+        }
+        return $this->render('create-category');
+    }
+
+    public function actionEditCategory(): string|Response
+    {
+        if ($this->appRequest->isPost) {
+            $form = new CreateCategoryForm();
+            if ($form->load($this->appRequest->post(), '') && $form->update()) {
+                $this->session->setFlash('success', 'Category updated');
+            }
+            return $this->redirect('/admin/category');
+        }
+
+        $categoryId = $this->appRequest->get('id');
+        if (is_null($categoryId)) {
+            $this->session->setFlash('error', 'Not specified category');
+            return $this->redirect('/admin/category');
+        }
+        $category = Category::findOne($categoryId);
+
+        return $this->render('edit-category', compact('category'));
+    }
+
+    public function actionDeleteCategory(): Response
+    {
+        $categoryId = $this->appRequest->get('id');
+        if (is_null($categoryId)) {
+            $this->session->setFlash('error', 'Not specified category');
+            return $this->redirect('/admin/category');
+        }
+        $category = Category::findOne($categoryId);
+        $category->delete();
+
+        return $this->redirect('/admin/category');
     }
 
     public function actionProduct(): string
