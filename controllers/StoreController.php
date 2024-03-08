@@ -28,9 +28,18 @@ class StoreController extends Controller
         $productsQuery = $this->queryRequest($productsQuery);
         $products = $productsQuery->all();
 
+        $page = $this->appRequest->get('page', 1);
+        $perPage = 10;
+
         $categories = Category::find()->all();
         $vendors = Vendor::find()->all();
-        return $this->render('index', compact('products', 'categories', 'vendors'));
+        return $this->render('index', compact(
+            'products',
+            'categories',
+            'vendors',
+            'page',
+            'perPage'
+        ));
     }
 
     public function actionShow()
@@ -46,7 +55,12 @@ class StoreController extends Controller
         if ($category = $this->appRequest->get('category')) {
             $query->where(['category_id' => $category]);
         }
-//        TODO price
+        if ($minPrice = $this->appRequest->get('min_price')) {
+            $query->where(['>=', 'price', $minPrice]);
+        }
+        if ($maxPrice = $this->appRequest->get('max_price')) {
+            $query->where(['<=', 'price', $maxPrice]);
+        }
         return $query;
     }
 }

@@ -2,6 +2,8 @@
 /**
  * @var \app\models\Category[] $categories
  * @var \app\models\Product[] $products
+ * @var int $page
+ * @var int $perPage
  */
 
 $this->params['header'] = 'Shop';
@@ -47,13 +49,13 @@ $this->params['breadcrumbs'] = [
                     </div>
                     <div class="single__widget price__filter widget__bg">
                         <h2 class="widget__title position__relative h3">Filter By Price</h2>
-                        <form class="price__filter--form" action="#">
+                        <form class="price__filter--form" action="/store">
                             <div class="price__filter--form__inner mb-15 d-flex align-items-center">
                                 <div class="price__filter--group">
                                     <label class="price__filter--label" for="Filter-Price-GTE1">From</label>
                                     <div class="price__filter--input border-radius-5 d-flex align-items-center">
                                         <span class="price__filter--currency">$</span>
-                                        <input class="price__filter--input__field border-0" id="Filter-Price-GTE1" name="filter.v.price.gte" type="number" placeholder="0" min="0" max="250.00">
+                                        <input class="price__filter--input__field border-0" id="Filter-Price-GTE1" name="min_price" type="number" placeholder="0" min="0" max="10000.00">
                                     </div>
                                 </div>
                                 <div class="price__divider">
@@ -63,7 +65,7 @@ $this->params['breadcrumbs'] = [
                                     <label class="price__filter--label" for="Filter-Price-LTE1">To</label>
                                     <div class="price__filter--input border-radius-5 d-flex align-items-center">
                                         <span class="price__filter--currency">$</span>
-                                        <input class="price__filter--input__field border-0" id="Filter-Price-LTE1" name="filter.v.price.lte" type="number" min="0" placeholder="250.00" max="250.00">
+                                        <input class="price__filter--input__field border-0" id="Filter-Price-LTE1" name="max_price" type="number" min="0" placeholder="10000.00" max="10000.00">
                                     </div>
                                 </div>
                             </div>
@@ -80,18 +82,6 @@ $this->params['breadcrumbs'] = [
                     </button>
                     <div class="product__view--mode d-flex align-items-center">
                         <div class="product__view--mode__list product__short--by align-items-center d-none d-lg-flex">
-                            <label class="product__view--label">Prev Page :</label>
-                            <div class="select shop__header--select">
-                                <select class="product__view--select">
-                                    <option selected value="1">65</option>
-                                    <option value="2">40</option>
-                                    <option value="3">42</option>
-                                    <option value="4">57 </option>
-                                    <option value="5">60 </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="product__view--mode__list product__short--by align-items-center d-none d-lg-flex">
                             <label class="product__view--label">Sort By :</label>
                             <div class="select shop__header--select">
                                 <select class="product__view--select">
@@ -103,7 +93,7 @@ $this->params['breadcrumbs'] = [
                             </div>
                         </div>
                     </div>
-                    <p class="product__showing--count">Showing 1–9 of 21 results</p>
+                    <p class="product__showing--count"><?=count($products)?> results</p>
                 </div>
                 <div class="shop__product--wrapper">
                     <div class="tab_content">
@@ -138,27 +128,27 @@ $this->params['breadcrumbs'] = [
                             </div>
                         </div>
                     </div>
-                    <div class="pagination__area bg__gray--color">
-                        <nav class="pagination justify-content-center">
-                            <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
-                                <li class="pagination__list">
-                                    <a href="shop.html" class="pagination__item--arrow  link ">
-                                        <svg xmlns="http://www.w3.org/2000/svg"  width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/></svg>
-                                        <span class="visually-hidden">pagination arrow</span>
-                                    </a>
-                                <li>
-                                <li class="pagination__list"><span class="pagination__item pagination__item--current">1</span></li>
-                                <li class="pagination__list"><a href="shop.html" class="pagination__item link">2</a></li>
-                                <li class="pagination__list"><a href="shop.html" class="pagination__item link">3</a></li>
-                                <li class="pagination__list"><a href="shop.html" class="pagination__item link">4</a></li>
-                                <li class="pagination__list">
-                                    <a href="shop.html" class="pagination__item--arrow  link ">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100"/></svg>
-                                        <span class="visually-hidden">pagination arrow</span>
-                                    </a>
-                                <li>
-                            </ul>
-                        </nav>
+<!--                    <div class="pagination__area bg__gray--color">-->
+<!--                        <nav class="pagination justify-content-center">-->
+<!--                            <ul class="pagination__wrapper d-flex align-items-center justify-content-center">-->
+<!--                                <li class="pagination__list">-->
+<!--                                    <a href="/store?page=--><?php //=$page-1?><!--" class="pagination__item--arrow  link ">-->
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg"  width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/></svg>-->
+<!--                                        <span class="visually-hidden">pagination arrow</span>-->
+<!--                                    </a>-->
+<!--                                <li>-->
+<!--                                <li class="pagination__list"><span class="pagination__item pagination__item--current">1</span></li>-->
+<!--                                <li class="pagination__list"><a href="shop.html" class="pagination__item link">2</a></li>-->
+<!--                                <li class="pagination__list"><a href="shop.html" class="pagination__item link">3</a></li>-->
+<!--                                <li class="pagination__list"><a href="shop.html" class="pagination__item link">4</a></li>-->
+<!--                                <li class="pagination__list">-->
+<!--                                    <a href="/store?page=--><?php //=$page+1?><!--" class="pagination__item--arrow  link ">-->
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100"/></svg>-->
+<!--                                        <span class="visually-hidden">pagination arrow</span>-->
+<!--                                    </a>-->
+<!--                                <li>-->
+<!--                            </ul>-->
+<!--                        </nav>-->
                     </div>
                 </div>
             </div>
