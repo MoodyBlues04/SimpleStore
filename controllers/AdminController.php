@@ -20,10 +20,9 @@ class AdminController extends Controller
 {
 //    TODO 1) permissions for each action
 //    TODO 7) icons in show
-//    TODO 3) shopping cart
-//    TODO 4) profile finish & small todos
 //    TODO 5) describe all
 //    TODO 6) refactor (remove copy paste cruds e t c)
+//    TODO 6) quantity & total price on JS in CART
 
     public $layout = 'admin_dashboard';
 

@@ -118,7 +118,7 @@ $this->params['breadcrumbs'] = [
                                                     <div class="product__card--price">
                                                         <span class="current__price">$<?=$product->price?></span>
                                                     </div>
-                                                    <a class="product__card--btn primary__btn" href="cart/add?product=<?=$product->id?>">
+                                                    <a class="product__card--btn primary__btn" href="/cart/add?product=<?=$product->id?>">
                                                         Add To Card
                                                     </a>
                                                 </div>
