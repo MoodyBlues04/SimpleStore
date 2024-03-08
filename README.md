@@ -13,3 +13,4 @@ That project made for those who want to learn more about yii2 framework.
 3. Specify your DB config in config/dp.php
 4. Run ```php yii migrate/up``` to set up all project migrations
 5. Run ```php yii migrate --migrationPath=@yii/rbac/migrations``` to set up rbac migrations
+6. Run ```php yii rbac-seeder/seed``` and ```php yii user-seeder/seed``` to seed database with default roles and users
