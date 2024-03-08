@@ -2,11 +2,15 @@
 
 namespace app\controllers;
 
+use app\models\forms\admin\CreateVendorForm;
 use app\models\forms\admin\EditRoleForm;
 use app\models\forms\admin\EditUserForm;
 use app\models\User;
+use app\models\Vendor;
 use yii\web\Controller;
+use yii\web\Request;
 use yii\web\Response;
+use yii\web\Session;
 
 class AdminController extends Controller
 {
@@ -27,6 +31,8 @@ class AdminController extends Controller
     public $layout = 'admin_dashboard';
 
     private User $admin;
+    private Request $appRequest;
+    private Session $session;
 
     /**
      * @throws \Throwable
@@ -35,6 +41,8 @@ class AdminController extends Controller
     {
         parent::__construct($id, $module, $config);
         $this->admin = \Yii::$app->user->getIdentity();
+        $this->appRequest = \Yii::$app->request;
+        $this->session = \Yii::$app->getSession();
     }
 
     public function actionIndex(): string
@@ -50,17 +58,17 @@ class AdminController extends Controller
 
     public function actionEditUser(): string|Response
     {
-        if (\Yii::$app->request->isPost) {
+        if ($this->appRequest->isPost) {
             $form = new EditUserForm();
-            if ($form->load(\Yii::$app->request->post(), '') && $form->update()) {
-                \Yii::$app->getSession()->setFlash('success', 'User updated');
+            if ($form->load($this->appRequest->post(), '') && $form->update()) {
+                $this->session->setFlash('success', 'User updated');
             }
             return $this->redirect('/admin/user');
         }
 
-        $userId = \Yii::$app->request->get('id');
+        $userId = $this->appRequest->get('id');
         if (is_null($userId)) {
-            \Yii::$app->getSession()->setFlash('error', 'Not specified user id');
+            $this->session->setFlash('error', 'Not specified user id');
             return $this->redirect('/admin/user');
         }
 
@@ -78,17 +86,17 @@ class AdminController extends Controller
 
     public function actionEditRole(): string|Response
     {
-        if (\Yii::$app->request->isPost) {
+        if ($this->appRequest->isPost) {
             $form = new EditRoleForm();
-            if ($form->load(\Yii::$app->request->post(), '') && $form->updateRole()) {
-                \Yii::$app->getSession()->setFlash('success', 'Role updated');
+            if ($form->load($this->appRequest->post(), '') && $form->updateRole()) {
+                $this->session->setFlash('success', 'Role updated');
             }
             return $this->redirect('/admin/role');
         }
 
-        $roleName = \Yii::$app->request->get('role');
+        $roleName = $this->appRequest->get('role');
         if (is_null($roleName)) {
-            \Yii::$app->getSession()->setFlash('error', 'Not specified role');
+            $this->session->setFlash('error', 'Not specified role');
             return $this->redirect('/admin/role');
         }
 
@@ -99,7 +107,53 @@ class AdminController extends Controller
 
     public function actionVendor(): string
     {
-        return $this->render('vendor');
+        $vendors = Vendor::find()->all();
+        return $this->render('vendor', compact('vendors'));
+    }
+
+    public function actionCreateVendor(): string|Response
+    {
+        if ($this->appRequest->isPost) {
+            $form = new CreateVendorForm();
+            if ($form->load($this->appRequest->post(), '') && $form->create()) {
+                $this->session->setFlash('success', 'Vendor created');
+            }
+            return $this->redirect('/admin/vendor');
+        }
+        return $this->render('create-vendor');
+    }
+
+    public function actionEditVendor(): string|Response
+    {
+        if ($this->appRequest->isPost) {
+            $form = new CreateVendorForm();
+            if ($form->load($this->appRequest->post(), '') && $form->update()) {
+                $this->session->setFlash('success', 'Vendor updated');
+            }
+            return $this->redirect('/admin/vendor');
+        }
+
+        $vendorId = $this->appRequest->get('id');
+        if (is_null($vendorId)) {
+            $this->session->setFlash('error', 'Not specified vendor');
+            return $this->redirect('/admin/vendor');
+        }
+        $vendor = Vendor::findOne($vendorId);
+
+        return $this->render('edit-vendor', compact('vendor'));
+    }
+
+    public function actionDeleteVendor(): Response
+    {
+        $vendorId = $this->appRequest->get('id');
+        if (is_null($vendorId)) {
+            $this->session->setFlash('error', 'Not specified vendor');
+            return $this->redirect('/admin/vendor');
+        }
+        $vendor = Vendor::findOne($vendorId);
+        $vendor->delete();
+
+        return $this->redirect('/admin/vendor');
     }
 
     public function actionCategory(): string
