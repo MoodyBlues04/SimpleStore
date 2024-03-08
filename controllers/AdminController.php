@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\forms\admin\EditRoleForm;
 use app\models\forms\admin\EditUserForm;
 use app\models\User;
 use yii\web\Controller;
@@ -78,10 +79,10 @@ class AdminController extends Controller
     public function actionEditRole(): string|Response
     {
         if (\Yii::$app->request->isPost) {
-//            $form = new EditUserForm();
-//            if ($form->load(\Yii::$app->request->post(), '') && $form->update()) {
-//                \Yii::$app->getSession()->setFlash('success', 'User updated');
-//            }
+            $form = new EditRoleForm();
+            if ($form->load(\Yii::$app->request->post(), '') && $form->updateRole()) {
+                \Yii::$app->getSession()->setFlash('success', 'Role updated');
+            }
             return $this->redirect('/admin/role');
         }
 

@@ -18,17 +18,20 @@
                             <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>">
                         </label>
                         <label>
-                            <input type="hidden" name="id" value="<?=$role->name?>">
+                            <input type="hidden" name="role" value="<?=$role->name?>">
                         </label>
-                        <label>
-                            <select name="permissions" id="select-permissions" class="account__login--input">
-<!--                                TODO checkbox dropdown -->
-                                <option value="<?=null?>" selected></option>
-                                <?php foreach ($permissions as $permission): ?>
-                                    <option value="<?= $permission->name ?>"><?= $permission->name ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </label>
+                        Permissions:
+                        <?php foreach ($permissions as $idx => $permission): ?>
+                            <label>
+                                <?=$permission->name?>
+                                <input
+                                        type="checkbox"
+                                        name="permissions[<?=$idx?>]"
+                                        id="select-permissions"
+                                        value="<?=$permission->name?>"
+                                        <?= (\Yii::$app->authManager->hasChild($role, $permission)) ? 'checked' : ''?>>
+                            </label>
+                        <?php endforeach; ?>
                         <button class="account__login--btn primary__btn" type="submit">Edit</button>
                     </div>
                 </div>

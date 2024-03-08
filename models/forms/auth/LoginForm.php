@@ -59,7 +59,7 @@ class LoginForm extends Model
         );
     }
 
-    public function getUser(): ?User
+    private function getUser(): ?User
     {
         return User::findByEmail($this->email);
     }

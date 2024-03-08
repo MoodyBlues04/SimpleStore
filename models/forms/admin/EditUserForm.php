@@ -51,12 +51,12 @@ class EditUserForm extends Model
         return \Yii::$app->authManager->assign($this->getRole(), $this->id);
     }
 
-    public function getRole(): ?Role
+    private function getRole(): ?Role
     {
         return \Yii::$app->authManager->getRole($this->role);
     }
 
-    public function getUser(): ?User
+    private function getUser(): ?User
     {
         return User::findOne($this->id);
     }
