@@ -51,6 +51,7 @@ class CartController extends Controller
             if (($key = array_search($productId, $products)) !== false) {
                 unset($products[$key]);
             }
+            $this->session->set('products', $products);
         }
 
 //        return $this->asJson(['success' => true]);
