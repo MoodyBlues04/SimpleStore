@@ -18,11 +18,12 @@
                             <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>">
                         </label>
                         <label>
-                            <input type="hidden" name="id" value="<?=Yii::$app->request->getCsrfToken()?>">
-                        </label>
-                        <label>
                             Name
                             <input name="name" class="account__login--input" type="text">
+                        </label>
+                        <label>
+                            Price
+                            <input name="price" class="account__login--input" type="nuber">
                         </label>
                         <label>
                             Vendor
