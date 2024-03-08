@@ -21,6 +21,7 @@
                             <input type="hidden" name="id" value="<?=$user->id?>">
                         </label>
                         <label>
+                            Role
                             <select name="role" id="select-role" class="account__login--input">
                                 <option value="<?=null?>" selected></option>
                                 <?php foreach ($roles as $role): ?>

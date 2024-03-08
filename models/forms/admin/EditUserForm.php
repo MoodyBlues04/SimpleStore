@@ -21,7 +21,15 @@ class EditUserForm extends Model
         ];
     }
 
-    public function validateId(): void
+    /**
+     * @throws \Exception
+     */
+    public function update(): \yii\rbac\Assignment
+    {
+        return \Yii::$app->authManager->assign($this->getRole(), $this->id);
+    }
+
+    private function validateId(): void
     {
         if ($this->hasErrors()) {
             return;
@@ -32,7 +40,7 @@ class EditUserForm extends Model
         }
     }
 
-    public function validateRole(): void
+    private function validateRole(): void
     {
         if ($this->hasErrors()) {
             return;
@@ -41,14 +49,6 @@ class EditUserForm extends Model
         if (is_null($role)) {
             $this->addError('role', 'Incorrect role.');
         }
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function update(): \yii\rbac\Assignment
-    {
-        return \Yii::$app->authManager->assign($this->getRole(), $this->id);
     }
 
     private function getRole(): ?Role

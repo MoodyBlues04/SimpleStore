@@ -11,6 +11,7 @@
                             <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>">
                         </label>
                         <label>
+                            Name
                             <input name="name" class="account__login--input" type="text">
                         </label>
                         <button class="account__login--btn primary__btn" type="submit">Create</button>

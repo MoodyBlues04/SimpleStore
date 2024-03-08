@@ -18,6 +18,7 @@
                             <input type="hidden" name="id" value="<?=$vendor->id?>">
                         </label>
                         <label>
+                            Name
                             <input name="name" class="account__login--input" type="text" value="<?= $vendor->name?>">
                         </label>
                         <button class="account__login--btn primary__btn" type="submit">Edit</button>

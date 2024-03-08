@@ -4,9 +4,11 @@ namespace app\controllers;
 
 use app\models\Category;
 use app\models\forms\admin\CreateCategoryForm;
+use app\models\forms\admin\CreateProductForm;
 use app\models\forms\admin\CreateVendorForm;
 use app\models\forms\admin\EditRoleForm;
 use app\models\forms\admin\EditUserForm;
+use app\models\Product;
 use app\models\User;
 use app\models\Vendor;
 use yii\web\Controller;
@@ -21,14 +23,7 @@ class AdminController extends Controller
 //    TODO 3) shopping cart
 //    TODO 4) profile finish & small todos
 //    TODO 5) describe all
-
-    /*
-    users edit only roles
-    Products list & add
-    permissions just list & add
-    vendors: list & add
-    categories: list & add
-     */
+//    TODO 6) refactor (remove copy paste cruds e t c)
 
     public $layout = 'admin_dashboard';
 
@@ -211,6 +206,58 @@ class AdminController extends Controller
 
     public function actionProduct(): string
     {
-        return $this->render('user');
+        $products = Product::find()->all();
+        return $this->render('product', compact('products'));
+    }
+
+
+    public function actionCreateProduct(): string|Response
+    {
+        if ($this->appRequest->isPost) {
+            $form = new CreateProductForm();
+            if ($form->load($this->appRequest->post(), '') && $form->create()) {
+                $this->session->setFlash('success', 'Product created');
+            }
+            return $this->redirect('/admin/product');
+        }
+
+        $vendors = Vendor::find()->all();
+        $categories = Category::find()->all();
+        return $this->render('create-product', compact('vendors', 'categories'));
+    }
+
+    public function actionEditProduct(): string|Response
+    {
+        if ($this->appRequest->isPost) {
+            $form = new CreateProductForm();
+            if ($form->load($this->appRequest->post(), '') && $form->update()) {
+                $this->session->setFlash('success', 'Product updated');
+            }
+            return $this->redirect('/admin/product');
+        }
+
+        $productId = $this->appRequest->get('id');
+        if (is_null($productId)) {
+            $this->session->setFlash('error', 'Not specified product');
+            return $this->redirect('/admin/product');
+        }
+
+        $product = Product::findOne($productId);
+        $vendors = Vendor::find()->all();
+        $categories = Category::find()->all();
+        return $this->render('edit-product', compact('product', 'vendors', 'categories'));
+    }
+
+    public function actionDeleteProduct(): Response
+    {
+        $productId = $this->appRequest->get('id');
+        if (is_null($productId)) {
+            $this->session->setFlash('error', 'Not specified product');
+            return $this->redirect('/admin/product');
+        }
+        $product = Product::findOne($productId);
+        $product->delete();
+
+        return $this->redirect('/admin/product');
     }
 }

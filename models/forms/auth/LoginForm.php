@@ -28,7 +28,7 @@ class LoginForm extends Model
      * Validates the username and password.
      * This method serves as the inline validation for password.
      */
-    public function validatePassword(): void
+    private function validatePassword(): void
     {
         if ($this->hasErrors()) {
             return;

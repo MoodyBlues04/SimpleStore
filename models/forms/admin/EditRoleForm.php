@@ -30,30 +30,6 @@ class EditRoleForm extends Model
         ];
     }
 
-    public function validateRole(): void
-    {
-        if ($this->hasErrors()) {
-            return;
-        }
-        $role = $this->getRole();
-        if (is_null($role)) {
-            $this->addError('role', 'Incorrect role.');
-        }
-    }
-
-    public function validatePermissions(): void
-    {
-        if ($this->hasErrors()) {
-            return;
-        }
-        $permissions = $this->getPermissions();
-        foreach ($permissions as $permission) {
-            if (null === $this->auth->getPermission($permission)) {
-                $this->addError('permissions', 'Incorrect permission.');
-            }
-        }
-    }
-
     /**
      * @throws Exception
      */
@@ -66,6 +42,30 @@ class EditRoleForm extends Model
             $this->auth->addChild($role, $permission);
         }
         return true;
+    }
+
+    private function validateRole(): void
+    {
+        if ($this->hasErrors()) {
+            return;
+        }
+        $role = $this->getRole();
+        if (is_null($role)) {
+            $this->addError('role', 'Incorrect role.');
+        }
+    }
+
+    private function validatePermissions(): void
+    {
+        if ($this->hasErrors()) {
+            return;
+        }
+        $permissions = $this->getPermissions();
+        foreach ($permissions as $permission) {
+            if (null === $this->auth->getPermission($permission)) {
+                $this->addError('permissions', 'Incorrect permission.');
+            }
+        }
     }
 
     private function getRole(): ?Role

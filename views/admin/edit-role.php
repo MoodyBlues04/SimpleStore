@@ -18,7 +18,8 @@
                             <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>">
                         </label>
                         <label>
-                            <input type="hidden" name="role" value="<?=$role->name?>">
+                            Name
+                            <input type="text" class="account__login--input" disabled name="role" value="<?=$role->name?>">
                         </label>
                         Permissions:
                         <?php foreach ($permissions as $idx => $permission): ?>

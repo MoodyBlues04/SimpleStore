@@ -18,9 +18,11 @@
                             <input type="hidden" name="id" value="<?=$category->id?>">
                         </label>
                         <label>
+                            Name
                             <input name="name" class="account__login--input" type="text" value="<?= $category->name?>">
                         </label>
                         <label>
+                            Description
                             <textarea name="description" class="account__login--input"><?= $category->description?></textarea>
                         </label>
                         <button class="account__login--btn primary__btn" type="submit">Edit</button>
