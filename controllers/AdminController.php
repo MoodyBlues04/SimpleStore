@@ -19,7 +19,6 @@ use yii\web\Session;
 class AdminController extends Controller
 {
 //    TODO 1) permissions for each action
-//    TODO 2) products index with pagination and filters
 //    TODO 3) shopping cart
 //    TODO 4) profile finish & small todos
 //    TODO 5) describe all

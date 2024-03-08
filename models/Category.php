@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\traits\HasTimestamps;
 use yii\db\ActiveRecord;
 
 /**
@@ -13,8 +14,16 @@ use yii\db\ActiveRecord;
  */
 class Category extends ActiveRecord
 {
+    use HasTimestamps;
+
     public static function tableName(): string
     {
         return "{{%categories}}";
+    }
+
+    public function beforeSave($insert): bool
+    {
+        $this->setTimestamps();
+        return parent::beforeSave($insert);
     }
 }

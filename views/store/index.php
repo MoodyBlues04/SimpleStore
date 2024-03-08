@@ -82,15 +82,16 @@ $this->params['breadcrumbs'] = [
                     </button>
                     <div class="product__view--mode d-flex align-items-center">
                         <div class="product__view--mode__list product__short--by align-items-center d-none d-lg-flex">
-                            <label class="product__view--label">Sort By :</label>
-                            <div class="select shop__header--select">
-                                <select class="product__view--select">
-                                    <option selected value="1">Sort by latest</option>
-                                    <option value="2">Sort by popularity</option>
-                                    <option value="3">Sort by newness</option>
-                                    <option value="4">Sort by  rating </option>
-                                </select>
-                            </div>
+                            <form action="/store" id="sort-form">
+                                <label class="product__view--label">Sort By :</label>
+                                <div class="select shop__header--select">
+                                    <select class="product__view--select" name="sort_by" onchange="document.getElementById('sort-form').submit()">
+                                        <option selected value="latest">Sort by latest</option>
+                                        <option value="newest">Sort by newness</option>
+                                        <option value="price">Sort by price </option>
+                                    </select>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <p class="product__showing--count"><?=count($products)?> results</p>

@@ -11,6 +11,10 @@ use yii\web\Request;
 
 class StoreController extends Controller
 {
+    public const SORT_NEWEST = 'newest';
+    public const SORT_LATEST = 'latest';
+    public const SORT_PRICE = 'price';
+
     public $layout = 'store';
 
     private Request $appRequest;
@@ -23,9 +27,9 @@ class StoreController extends Controller
 
     public function actionIndex(): string
     {
-//        TODO quering
         $productsQuery = Product::find();
-        $productsQuery = $this->queryRequest($productsQuery);
+        $productsQuery = $this->queryFilters($productsQuery);
+        $productsQuery = $this->querySort($productsQuery);
         $products = $productsQuery->all();
 
         $page = $this->appRequest->get('page', 1);
@@ -47,7 +51,7 @@ class StoreController extends Controller
 
     }
 
-    private function queryRequest(ActiveQuery $query): ActiveQuery
+    private function queryFilters(ActiveQuery $query): ActiveQuery
     {
         if ($search = $this->appRequest->get('search')) {
             $query->where(['like', 'name', "%{$search}%", false]);
@@ -60,6 +64,20 @@ class StoreController extends Controller
         }
         if ($maxPrice = $this->appRequest->get('max_price')) {
             $query->where(['<=', 'price', $maxPrice]);
+        }
+        return $query;
+    }
+
+    private function querySort(ActiveQuery $query): ActiveQuery
+    {
+        if ($sort = $this->appRequest->get('sort_by')) {
+            if (self::SORT_PRICE === $sort) {
+                $query->orderBy(['price' => 'asc']);
+            } elseif (self::SORT_NEWEST === $sort) {
+                $query->orderBy(['created_at' => 'desc']);
+            } elseif (self::SORT_LATEST === $sort) {
+                $query->orderBy(['created_at' => 'asc']);
+            }
         }
         return $query;
     }

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\traits\HasTimestamps;
 use yii\base\Exception;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
@@ -23,6 +24,8 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+    use HasTimestamps;
+
     public static function tableName(): string
     {
         return "{{%users}}";
@@ -48,6 +51,7 @@ class User extends ActiveRecord implements IdentityInterface
         if (!parent::beforeSave($insert)) {
             return false;
         }
+        $this->setTimestamps();
         if ($this->isNewRecord) {
             $this->generateAuthKey();
         }

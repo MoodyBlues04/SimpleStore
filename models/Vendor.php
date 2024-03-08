@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\traits\HasTimestamps;
 use yii\db\ActiveRecord;
 
 /**
@@ -13,8 +14,16 @@ use yii\db\ActiveRecord;
  */
 class Vendor extends ActiveRecord
 {
+    use HasTimestamps;
+
     public static function tableName(): string
     {
         return "{{%vendors}}";
+    }
+
+    public function beforeSave($insert): bool
+    {
+        $this->setTimestamps();
+        return parent::beforeSave($insert);
     }
 }
