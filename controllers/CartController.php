@@ -27,8 +27,7 @@ class CartController extends Controller
 
     public function actionIndex(): string
     {
-        $productsIds = $this->session->get('products', []);
-        $products = Product::find()->where(['in', 'id', $productsIds])->all();
+        $products = $this->getProducts();
         return $this->render('index', compact('products'));
     }
 
@@ -64,9 +63,15 @@ class CartController extends Controller
         return $this->redirect('/cart');
     }
 
-    public function actionCheckout()
+    public function actionCheckout(): string
     {
-        echo '<pre>';
-        var_dump(\Yii::$app->request->get());
+        $products = $this->getProducts();
+        return $this->render('checkout', compact('products'));
+    }
+
+    private function getProducts(): array
+    {
+        $productsIds = $this->session->get('products', []);
+        return Product::find()->where(['in', 'id', $productsIds])->all();
     }
 }
