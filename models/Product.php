@@ -6,6 +6,7 @@ use app\models\traits\HasTimestamps;
 use yii\db\ActiveRecord;
 
 /**
+ * Product is main model in application. Stores information about products, you can get category, vendor and images info here
  * @property int $id
  * @property int $category_id
  * @property int $vendor_id

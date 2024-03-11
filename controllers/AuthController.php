@@ -42,6 +42,10 @@ class AuthController extends Controller
         ];
     }
 
+    /**
+     * Logges in user, validates his input.
+     * @return \yii\web\Response|string
+     */
     public function actionLogin(): \yii\web\Response|string
     {
         if (!Yii::$app->user->isGuest) {
@@ -54,13 +58,16 @@ class AuthController extends Controller
                 \Yii::$app->getSession()->setFlash('success', 'You\'ve successfully logged in');
                 return $this->goBack();
             }
-            var_dump(Yii::$app->request->post());
         } catch (\Exception $e) {
             \Yii::$app->getSession()->setFlash('error', $e->getMessage());
         }
         return $this->render('login');
     }
 
+    /**
+     * Log out.
+     * @return \yii\web\Response
+     */
     public function actionLogout(): \yii\web\Response
     {
         Yii::$app->user->logout();
@@ -68,6 +75,10 @@ class AuthController extends Controller
         return $this->goHome();
     }
 
+    /**
+     * Validates users input, sends to him mail for email verification and signes in.
+     * @return \yii\web\Response|string
+     */
     public function actionSignup(): \yii\web\Response|string
     {
         try {
@@ -82,6 +93,11 @@ class AuthController extends Controller
         return $this->render('signup');
     }
 
+    /**
+     * Verifies users email confirmation.
+     * @param $token
+     * @return \yii\web\Response
+     */
     public function actionEmailConfirm($token): \yii\web\Response
     {
         $model = new EmailConfirm($token);

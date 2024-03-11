@@ -6,6 +6,8 @@ use app\models\traits\HasTimestamps;
 use yii\db\ActiveRecord;
 
 /**
+ * Vendor of products
+ *
  * @property int $id
  * @property string $name
  * @property ?string $description

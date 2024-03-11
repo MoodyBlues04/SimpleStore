@@ -6,6 +6,8 @@ use app\models\traits\HasTimestamps;
 use yii\db\ActiveRecord;
 
 /**
+ * Stores product's images
+ *
  * @property int $id
  * @property int $product_id
  * @property string $path

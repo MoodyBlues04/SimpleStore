@@ -19,6 +19,8 @@ class UserSeeder
     }
 
     /**
+     * Creates default users for application: user & admin
+     *
      * @throws \Exception
      */
     public function seed()

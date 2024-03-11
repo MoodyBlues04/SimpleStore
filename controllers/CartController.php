@@ -25,12 +25,20 @@ class CartController extends Controller
         $this->session = \Yii::$app->getSession();
     }
 
+    /**
+     * Renders cart page.
+     * @return string
+     */
     public function actionIndex(): string
     {
         $products = $this->getProducts();
         return $this->render('index', compact('products'));
     }
 
+    /**
+     * Adds products to cart. They are stored in session.
+     * @return Response
+     */
     public function actionAdd(): Response
     {
         if ($productId = $this->appRequest->get('product')) {
@@ -39,10 +47,13 @@ class CartController extends Controller
             $this->session->set('products', $products);
         }
 
-//        return $this->asJson(['success' => true]);
         return $this->goBack();
     }
 
+    /**
+     * Removes product from cart.
+     * @return Response
+     */
     public function actionRemove(): Response
     {
         if ($productId = $this->appRequest->get('product')) {
@@ -57,12 +68,20 @@ class CartController extends Controller
         return $this->goBack();
     }
 
+    /**
+     * Clears cart.
+     * @return Response
+     */
     public function actionRemoveAll(): Response
     {
         $this->session->set('products', []);
         return $this->redirect('/cart');
     }
 
+    /**
+     * Returns check out page
+     * @return string
+     */
     public function actionCheckout(): string
     {
         $products = $this->getProducts();

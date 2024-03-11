@@ -2,18 +2,18 @@
 
 namespace app\commands;
 
-use app\database\seeders\RbacSeeder as Seeder;
+use app\database\seeders\RbacSeeder;
 use yii\base\Exception;
 use yii\console\Controller;
 
 class RbacSeederController extends Controller
 {
-    private Seeder $seeder;
+    private RbacSeeder $seeder;
 
     public function __construct($id, $module, $config = [])
     {
         parent::__construct($id, $module, $config);
-        $this->seeder = new Seeder();
+        $this->seeder = new RbacSeeder();
     }
 
     /**

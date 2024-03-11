@@ -39,6 +39,10 @@ class SiteController extends Controller
     }
 
     /**
+     * It is basic controller automatically generated for application.
+     */
+
+    /**
      * {@inheritdoc}
      */
     public function actions()

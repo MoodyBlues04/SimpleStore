@@ -29,6 +29,10 @@ class StoreController extends Controller
         $this->session = \Yii::$app->getSession();
     }
 
+    /**
+     * Returns products list, that was queried by categories, search and price
+     * @return string
+     */
     public function actionIndex(): string
     {
         $productsQuery = Product::find();
@@ -50,6 +54,10 @@ class StoreController extends Controller
         ));
     }
 
+    /**
+     * Renders product information.
+     * @return string|Response
+     */
     public function actionShow(): string|Response
     {
         $id = $this->appRequest->get('id');
@@ -63,6 +71,11 @@ class StoreController extends Controller
         return $this->render('/store/show', compact('product'));
     }
 
+    /**
+     * Applies filters to products query.
+     * @param ActiveQuery $query
+     * @return ActiveQuery
+     */
     private function queryFilters(ActiveQuery $query): ActiveQuery
     {
         if ($search = $this->appRequest->get('search')) {
@@ -80,6 +93,11 @@ class StoreController extends Controller
         return $query;
     }
 
+    /**
+     * Sorts products query by parameters.
+     * @param ActiveQuery $query
+     * @return ActiveQuery
+     */
     private function querySort(ActiveQuery $query): ActiveQuery
     {
         if ($sort = $this->appRequest->get('sort_by')) {

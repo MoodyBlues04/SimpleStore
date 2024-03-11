@@ -6,6 +6,7 @@ use app\models\traits\HasTimestamps;
 use yii\db\ActiveRecord;
 
 /**
+ * Model stores information about product category. Using for example for querying filters for products list.
  * @property int $id
  * @property string $name
  * @property string $description

@@ -17,6 +17,8 @@ class RbacSeeder
     }
 
     /**
+     * Creates default permissions and roles for application
+     *
      * @throws \yii\base\Exception
      * @throws \Exception
      */

@@ -10,6 +10,12 @@ class ProfileController extends Controller
 {
     public $layout = 'store';
 
+    /**
+     * Returns user's profile info.
+     *
+     * @return \yii\web\Response|string
+     * @throws \Throwable
+     */
     public function actionIndex(): \yii\web\Response|string
     {
         if (\Yii::$app->user->isGuest) {

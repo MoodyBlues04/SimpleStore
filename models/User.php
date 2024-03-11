@@ -11,6 +11,7 @@ use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "{{%user}}".
+ * Using for authorization users.
  *
  * @property int $id
  * @property string $username
