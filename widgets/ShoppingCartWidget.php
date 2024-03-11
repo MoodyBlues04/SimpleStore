@@ -21,6 +21,7 @@ class ShoppingCartWidget extends Widget
     public function run(): string
     {
         $productsContents = '';
+        $totalPrice = 0;
         foreach ($this->products as $product) {
             $productsContents .= "<div class='minicart__product'>
                 <div class='minicart__product--items d-flex'>
@@ -38,6 +39,7 @@ class ShoppingCartWidget extends Widget
                     </div>
                 </div>
             </div>";
+            $totalPrice += $product->price;
         }
 
         return '<div class="offCanvas__minicart" tabindex="-1">
@@ -53,7 +55,7 @@ class ShoppingCartWidget extends Widget
                     <div class="minicart__amount">
                         <div class="minicart__amount_list d-flex justify-content-between">
                             <span>Total:</span>
-                            <span><b>$240.00</b></span>
+                            <span><b>$ ' . $totalPrice . '</b></span>
                         </div>
                     </div>
                     <div class="minicart__button d-flex justify-content-center">
