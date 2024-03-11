@@ -46,7 +46,7 @@ $totalPrice = array_sum(array_map(fn (\app\models\Product $product) => $product-
                                                     </svg>
                                                 </a>
                                                 <div class="cart__thumbnail">
-                                                    <a href="product-details.html"><img class="border-radius-5" src="../../web/img/product/product1.webp" alt="cart-product"></a>
+                                                    <a href="/<?=$product->getMainImagePath()?>"><img class="border-radius-5" src="<?=$product->getMainImagePath()?>" alt="cart-product"></a>
                                                 </div>
                                                 <div class="cart__content">
                                                     <h3 class="cart__content--title h4"><a href="/store/show?id=<?=$product->id?>"><?=$product->name?></a></h3

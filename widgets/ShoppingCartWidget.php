@@ -25,7 +25,7 @@ class ShoppingCartWidget extends Widget
             $productsContents .= "<div class='minicart__product'>
                 <div class='minicart__product--items d-flex'>
                     <div class='minicart__thumbnail'>
-                        <a href='product-details.html'><img src='../../../web/img/product/small-product1.webp' alt='prduct-img'></a>
+                        <a href='/store/show?ud={$product->id}'><img src='/{$product->getMainImagePath()}' alt='prduct-img'></a>
                     </div>
                     <div class='minicart__text'>
                         <h4 class='minicart__subtitle'><a href='/store/show?ud={$product->id}'>{$product->name}</a></h4>

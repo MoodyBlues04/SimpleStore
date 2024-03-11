@@ -106,8 +106,8 @@ $this->params['breadcrumbs'] = [
                                             <article class="product__card">
                                                 <div class="product__card--thumbnail">
                                                     <a class="product__card--thumbnail__link display-block" href="/store/show?id=<?=$product->id?>">
-                                                        <img class="product__card--thumbnail__img product__primary--img display-block" src="<?=$product->getMainImagePath()?>" alt="product-img">
-                                                        <img class="product__card--thumbnail__img product__secondary--img display-block" src="<?=$product->getMainImagePath()?>" alt="product-img">
+                                                        <img class="product__card--thumbnail__img product__primary--img display-block" src="/<?=$product->getMainImagePath()?>" alt="product-img">
+                                                        <img class="product__card--thumbnail__img product__secondary--img display-block" src="/<?=$product->getMainImagePath()?>" alt="product-img">
                                                     </a>
                                                 </div>
                                                 <div class="product__card--content text-center">
