@@ -15,13 +15,13 @@ use yii\web\Controller;
 use yii\web\Request;
 use yii\web\Response;
 use yii\web\Session;
+use yii\web\UploadedFile;
 
 class AdminController extends Controller
 {
 //    TODO 1) permissions for each action
 //    TODO 7) icons in show
 //    TODO 5) describe all
-//    TODO 6) refactor (remove copy paste cruds e t c)
 //    TODO 6) quantity & total price on JS in CART
 
     public $layout = 'admin_dashboard';
@@ -212,8 +212,10 @@ class AdminController extends Controller
 
     public function actionCreateProduct(): string|Response
     {
+//            TODO attach files on create & show in views
         if ($this->appRequest->isPost) {
             $form = new CreateProductForm();
+            $form->images = UploadedFile::getInstances($form, 'images');
             if ($form->load($this->appRequest->post(), '') && $form->create()) {
                 $this->session->setFlash('success', 'Product created');
             }

@@ -4,8 +4,10 @@ namespace app\models\forms\admin;
 
 use app\models\Category;
 use app\models\Product;
+use app\models\ProductImage;
 use app\models\Vendor;
 use yii\base\Model;
+use yii\web\UploadedFile;
 
 class CreateProductForm extends Model
 {
@@ -16,6 +18,13 @@ class CreateProductForm extends Model
     public string $description = '';
     public int $vendor = 0;
     public int $category = 0;
+    /** @var UploadedFile[]  */
+    public array $images = [];
+
+    public function formName(): string
+    {
+        return '';
+    }
 
     public function rules(): array
     {
@@ -25,20 +34,20 @@ class CreateProductForm extends Model
             [['name', 'preview', 'description'], 'string'],
             ['vendor', 'validateVendor'],
             ['category', 'validateCategory'],
+            [['images'], 'file', 'maxFiles' => 10],
         ];
     }
 
     public function create(): ?Product
     {
-        $product = new Product([
-            'name' => $this->name,
-            'price' => $this->price,
-            'preview' => $this->preview,
-            'description' => $this->description,
-            'vendor_id' => $this->vendor,
-            'category_id' => $this->category,
-        ]);
-        return $product->save() ? $product : null;
+        $product = $this->createProduct();
+        if (is_null($product)) {
+            return null;
+        }
+
+        $this->saveProductImages($product);
+
+        return $product;
     }
 
     public function update(): bool|int
@@ -51,6 +60,33 @@ class CreateProductForm extends Model
         $product->vendor_id = $this->vendor;
         $product->category_id = $this->category;
         return $product->update();
+    }
+
+    private function createProduct(): ?Product
+    {
+        $product = new Product([
+            'name' => $this->name,
+            'price' => $this->price,
+            'preview' => $this->preview,
+            'description' => $this->description,
+            'vendor_id' => $this->vendor,
+            'category_id' => $this->category,
+        ]);
+        return $product->save() ? $product : null;
+    }
+
+    private function saveProductImages(Product $product): void
+    {
+        $time = time();
+        foreach ($this->images as $image) {
+            $path = "images/$image->baseName-$time.$image->extension";
+            $image->saveAs($path);
+            $productImage = new ProductImage([
+                'product_id' => $product->id,
+                'path' => $path,
+            ]);
+            $productImage->save();
+        }
     }
 
     private function validateVendor(): void

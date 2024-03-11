@@ -5,7 +5,7 @@
  */
 ?>
 
-<form action="/admin/create-product" method="POST">
+<form action="/admin/create-product" method="POST" enctype="multipart/form-data">
     <div class="login__section--inner">
         <div class="row row-cols-md-1 row-cols-1">
             <div class="col offset-md-0">
@@ -23,7 +23,7 @@
                         </label>
                         <label>
                             Price
-                            <input name="price" class="account__login--input" type="nuber">
+                            <input name="price" class="account__login--input" type="number">
                         </label>
                         <label>
                             Vendor
@@ -51,6 +51,12 @@
                             Description
                             <textarea name="description" class="account__login--input"></textarea>
                         </label>
+                        <label>
+                            Images
+                            <br>
+                            <input type="file" name="images[]" multiple>
+                        </label>
+                        <br>
                         <button class="account__login--btn primary__btn" type="submit">Create</button>
                     </div>
                 </div>

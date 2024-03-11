@@ -42,4 +42,21 @@ class Product extends ActiveRecord
         /** @var Category */
         return $this->hasOne(Category::class, ['id' => 'category_id'])->one();
     }
+
+    /**
+     * @return ProductImage[]
+     */
+    public function images(): array
+    {
+        return $this->hasMany(ProductImage::class, ['product_id' => 'id'])->all();
+    }
+
+    public function getMainImagePath(): string
+    {
+        $images = $this->images();
+        if (count($images)) {
+            return $images[0]->path;
+        }
+        return 'no-image'; // TODO mb default img
+    }
 }
